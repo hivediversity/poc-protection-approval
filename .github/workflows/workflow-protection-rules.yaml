@@ -45,7 +45,7 @@ jobs:
     needs: [Build]
     runs-on: ubuntu-latest
     environment:
-      name: Staging
+      name: STG
       url: ${{ needs.SetupEnvironmentUrls.outputs.staging_url }}
     steps:
       - name: Deploy
@@ -56,7 +56,7 @@ jobs:
     needs: [DeployStaging]
     runs-on: ubuntu-latest
     environment:
-      name: Production
+      name: PROD
       url: ${{ needs.SetupEnvironmentUrls.outputs.prod_url }}
     steps:
       - name: Deploy
