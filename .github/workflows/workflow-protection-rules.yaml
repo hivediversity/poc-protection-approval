@@ -20,12 +20,20 @@ jobs:
         
   SetupEnvironmentUrls:
     runs-on: ubuntu-latest
+
     outputs:
-      qa_url: https://qa-${{ secrets.ENV_URL }}.com
-      staging_url: https://stg-${{ secrets.ENV_URL }}.com
-      prod_url: https://${{ secrets.ENV_URL }}.com
+      qa_url: ${{ steps.urls.outputs.qa_url }}
+      staging_url: ${{ steps.urls.outputs.staging_url }}
+      prod_url: ${{ steps.urls.outputs.prod_url }}
+
     steps:
-      - run: echo "Setup environment URLs"
+      - name: Setup urls
+        id: urls
+        run: |
+          echo "Setup environment URLs"
+          echo "qa_url=https://qa-${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT
+          echo "staging_url=https://stg-${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT
+          echo "prod_url=https://${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT
 
   DeployQA:
     name: Deploy to QA
