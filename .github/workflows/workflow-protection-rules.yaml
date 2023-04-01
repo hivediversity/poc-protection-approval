@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     environment :
       name: QA
-      url: 'http://qa-${{ ENV_URL }}.com'
+      url: 'http://qa-${{ secrets.ENV_URL }}.com'
     steps :
       - name: Deploy
         run: echo I am deploying!
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     environment :
       name: Staging
-      url: 'http://stg-${{ ENV_URL }}.com'
+      url: 'http://stg-${{ secrets.ENV_URL }}.com'
     steps:
       - name: Deploy
         run: echo I am deploying!
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     environment :
       name: Production
-      url: http://${{ ENV_URL }}.com'
+      url: http://${{ secrets.ENV_URL }}.com'
     steps:
       - name: Deploy
         run: echo I am deploying!
