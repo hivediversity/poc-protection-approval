@@ -17,6 +17,15 @@ jobs:
 
       - name: Compile
         run: echo Hello, world!
+        
+  SetupEnvironmentUrls:
+    runs-on: ubuntu-latest
+    outputs:
+      qa_url: https://${{ format('qa.{0}', secrets.ENV_URL) }}.com
+      staging_url: https://${{ format('stg.{0}', secrets.ENV_URL) }}.com
+      prod_url: https://${{ secrets.ENV_URL }}.com
+    steps:
+      - run: echo "Setup environment URLs"
 
   DeployQA:
     name: Deploy to QA
@@ -25,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: QA
-      url: https://qa-${{ format('qa.{0}', secrets.ENV_URL) }}.com
+      url: ${{ needs.SetupEnvironmentUrls.outputs.qa_url }}
     steps:
       - name: Deploy
         run: echo I am deploying!
@@ -37,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Staging
-      url: https://${{ format('stg.{0}', secrets.ENV_URL) }}.com
+      url: ${{ needs.SetupEnvironmentUrls.outputs.staging_url }}
     steps:
       - name: Deploy
         run: echo I am deploying!
@@ -48,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: https://${{ secrets.ENV_URL }}.com
+      url: ${{ needs.SetupEnvironmentUrls.outputs.prod_url }}
     steps:
       - name: Deploy
         run: echo I am deploying!
