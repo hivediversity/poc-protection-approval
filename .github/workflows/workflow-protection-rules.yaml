@@ -18,54 +18,57 @@ jobs:
       - name: Compile
         run: echo Hello, world!
         
-  SetupEnvironmentUrls:
-    runs-on: ubuntu-latest
-
-    outputs:
-      qa_url: ${{ steps.urls.outputs.qa_url }}
-      staging_url: ${{ steps.urls.outputs.staging_url }}
-      prod_url: ${{ steps.urls.outputs.prod_url }}
-
-    steps:
-      - name: Setup urls
-        id: urls
-        run: |
-          echo "Setup environment URLs"
-          echo "qa_url=https://qa-${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT
-          echo "staging_url=https://stg-${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT
-          echo "prod_url=https://${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT
 
   DeployQA:
     name: Deploy to QA
     if: github.event_name == 'pull_request'
-    needs: [Build, SetupEnvironmentUrls]
+    needs: [Build]
     runs-on: ubuntu-latest
     environment:
       name: QA
-      url: ${{ needs.SetupEnvironmentUrls.outputs.qa_url }}
+      url: ${{ steps.urls.outputs.qa_url }}
     steps:
       - name: Deploy
         run: echo I am deploying!
+
+      - name: Setup urls
+        id: urls
+        run: |
+          echo "Setup environment URLs"
+          echo "qa_url=https://qa-${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT        
 
   DeployStaging:
     name: Deploy to Staging
     if: github.event.ref == 'refs/heads/main'
-    needs: [Build, SetupEnvironmentUrls]
+    needs: [Build]
     runs-on: ubuntu-latest
     environment:
       name: STG
-      url: ${{ needs.SetupEnvironmentUrls.outputs.staging_url }}
+      url: ${{ steps.urls.outputs.stg_url }}
+
     steps:
       - name: Deploy
         run: echo I am deploying!
 
+      - name: Setup urls
+        id: urls
+        run: |
+          echo "Setup environment URLs"
+          echo "stg_url=https://stg-${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT
+
   DeployProd:
     name: Deploy to Production
-    needs: [DeployStaging, SetupEnvironmentUrls]
+    needs: [DeployStaging]
     runs-on: ubuntu-latest
     environment:
       name: PROD
-      url: ${{ needs.SetupEnvironmentUrls.outputs.prod_url }}
+      url: ${{ steps.urls.outputs.prod_url }}
     steps:
       - name: Deploy
         run: echo I am deploying!
+
+      - name: Setup urls
+        id: urls
+        run: |
+          echo "Setup environment URLs"
+          echo "prod_url=https://${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT        
