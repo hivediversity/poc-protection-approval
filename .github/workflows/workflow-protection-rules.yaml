@@ -21,8 +21,8 @@ jobs:
   SetupEnvironmentUrls:
     runs-on: ubuntu-latest
     outputs:
-      qa_url: https://${{ format('qa.{0}', secrets.ENV_URL) }}.com
-      staging_url: https://${{ format('stg.{0}', secrets.ENV_URL) }}.com
+      qa_url: https://qa-${{ secrets.ENV_URL }}.com
+      staging_url: https://stg-${{ secrets.ENV_URL }}.com
       prod_url: https://${{ secrets.ENV_URL }}.com
     steps:
       - run: echo "Setup environment URLs"
