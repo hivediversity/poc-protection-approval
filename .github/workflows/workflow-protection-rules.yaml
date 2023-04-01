@@ -35,7 +35,7 @@ jobs:
         id: urls
         run: |
           echo "Setup environment URLs"
-          echo "qa_url=https://qa-${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT        
+          echo "qa_url=https://qa-${{ vars.ENV_URL }}.com" >> $GITHUB_OUTPUT        
 
   DeployStaging:
     name: Deploy to Staging
@@ -54,7 +54,7 @@ jobs:
         id: urls
         run: |
           echo "Setup environment URLs"
-          echo "stg_url=https://stg-${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT
+          echo "stg_url=https://stg-${{ vars.ENV_URL }}.com" >> $GITHUB_OUTPUT
 
   DeployProd:
     name: Deploy to Production
@@ -71,4 +71,4 @@ jobs:
         id: urls
         run: |
           echo "Setup environment URLs"
-          echo "prod_url=https://${{ secrets.ENV_URL }}.com" >> $GITHUB_OUTPUT        
+          echo "prod_url=https://${{ vars.ENV_URL }}.com" >> $GITHUB_OUTPUT        
