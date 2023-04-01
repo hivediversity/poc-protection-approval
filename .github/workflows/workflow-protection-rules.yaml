@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Staging
-      url: https://stg-${{ format('qa.{0}', secrets.ENV_URL) }}.com
+      url: https://${{ format('stg.{0}', secrets.ENV_URL) }}.com
     steps:
       - name: Deploy
         run: echo I am deploying!
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-      url: https://${{ format('qa.{0}', secrets.ENV_URL) }}.com
+      url: https://${{ secrets.ENV_URL }}.com
     steps:
       - name: Deploy
         run: echo I am deploying!
