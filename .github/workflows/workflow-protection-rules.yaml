@@ -30,7 +30,7 @@ jobs:
   DeployQA:
     name: Deploy to QA
     if: github.event_name == 'pull_request'
-    needs: [Build]
+    needs: [Build, SetupEnvironmentUrls]
     runs-on: ubuntu-latest
     environment:
       name: QA
@@ -42,10 +42,10 @@ jobs:
   DeployStaging:
     name: Deploy to Staging
     if: github.event.ref == 'refs/heads/main'
-    needs: [Build]
+    needs: [Build, SetupEnvironmentUrls]
     runs-on: ubuntu-latest
     environment:
-      name: Staging
+      name: STG
       url: ${{ needs.SetupEnvironmentUrls.outputs.staging_url }}
     steps:
       - name: Deploy
@@ -53,10 +53,10 @@ jobs:
 
   DeployProd:
     name: Deploy to Production
-    needs: [DeployStaging]
+    needs: [DeployStaging, SetupEnvironmentUrls]
     runs-on: ubuntu-latest
     environment:
-      name: Production
+      name: PROD
       url: ${{ needs.SetupEnvironmentUrls.outputs.prod_url }}
     steps:
       - name: Deploy
